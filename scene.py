@@ -71,7 +71,12 @@ class SineCurveUnitCircle(Scene):
         
         def get_line_to_circle():
             return Line(origin_point, dot.get_center(), color=PINK)
-        
+
+        def get_line_to_curve():
+            x = self.curve_start[0] + self.t_offset * 4
+            y = dot.get_center()[1]
+            return Line(dot.get_center(), np.array([x, y, 0]), color=ORANGE, stroke_width=3)
+
         self.curve = VGroup()
         self.curve.add(Line(self.curve_start, self.curve_start))
 
@@ -83,12 +88,22 @@ class SineCurveUnitCircle(Scene):
             self.curve.add(new_line)
 
             return self.curve
+        
 
         sine_line = always_redraw(sine_updater)
-        origin_to_circle_line = always_redraw(get_line_to_circle)
+        sin_theta = MathTex("\\sin\\theta", color=BLUE).next_to(sine_line, RIGHT).scale(0.8)
+        sin_theta.add_updater(lambda s: s.next_to(sine_line, RIGHT)).scale(0.8)
+
+        lajna = Line(origin_point, [origin_point[0]+1, origin_point[1], origin_point[2]], color=GREEN)
+        origin_to_circle_line = always_redraw(get_line_to_curve)
+        angle = Angle(origin_to_circle_line, lajna)
+
+        dot_to_curve_line = always_redraw(get_line_to_curve)
         sine_curve_line = always_redraw(get_curve)
 
+        angle = Angle(origin_to_circle_line, lajna)
         dot.add_updater(go_around_circle)
-        self.add(origin_to_circle_line, sine_line, dot, sine_curve_line)
+
+        self.add(origin_to_circle_line, sine_line, angle, sin_theta, dot, dot_to_curve_line, sine_curve_line)
 
         self.wait(8.5)
