@@ -1,4 +1,3 @@
 # domaci
 
-Ovde je kod za domaci iz matematike iz oblasti trigonometrije.
-Radjen je u manimu.
+Domaci iz matematike, vezan za trigonometriju. Radjen u manimu.
