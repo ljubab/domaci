@@ -65,13 +65,30 @@ class SineCurveUnitCircle(Scene):
             # modulo 1 u pajtonu zapravo izvlaci decimale iz broja
             mob.move_to(orbit.point_from_proportion(self.t_offset))
         
-        def sine_updater(temp_line):
+        def sine_updater():
             newLine = Line([dot.get_center()[0], 0, 0], dot.get_center(), color=BLUE)
-            temp_line.become(newLine)
+            return newLine
+        
+        def get_line_to_circle():
+            return Line(origin_point, dot.get_center(), color=PINK)
+        
+        self.curve = VGroup()
+        self.curve.add(Line(self.curve_start, self.curve_start))
 
-        sine_line = Line([dot.get_center()[0], 0, 0], dot.get_center(), color=BLUE)
-        sine_line.add_updater(sine_updater)
+        def get_curve():
+            last_line = self.curve[-1]
+            x = self.curve_start[0] + self.t_offset * 4
+            y = dot.get_center()[1]
+            new_line = Line(last_line.get_end(), np.array([x, y, 0]), color=BLUE)
+            self.curve.add(new_line)
+
+            return self.curve
+
+        sine_line = always_redraw(sine_updater)
+        origin_to_circle_line = always_redraw(get_line_to_circle)
+        sine_curve_line = always_redraw(get_curve)
+
         dot.add_updater(go_around_circle)
-        self.add(sine_line, dot)
+        self.add(origin_to_circle_line, sine_line, dot, sine_curve_line)
 
         self.wait(8.5)
