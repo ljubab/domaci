@@ -61,9 +61,17 @@ class SineCurveUnitCircle(Scene):
             # moze da ima dve vrednost: 0 i 1
             # Ovo (dt * rate) zapravo kaze pomeri ga za rate ako pomeras
             self.t_offset += (dt * rate)
+            self.t_offset %= 1
             # modulo 1 u pajtonu zapravo izvlaci decimale iz broja
-            mob.move_to(orbit.point_from_proportion(self.t_offset % 1))
+            mob.move_to(orbit.point_from_proportion(self.t_offset))
         
+        def sine_updater(temp_line):
+            newLine = Line([dot.get_center()[0], 0, 0], dot.get_center(), color=BLUE)
+            temp_line.become(newLine)
+
+        sine_line = Line([dot.get_center()[0], 0, 0], dot.get_center(), color=BLUE)
+        sine_line.add_updater(sine_updater)
         dot.add_updater(go_around_circle)
-        self.add(dot)
+        self.add(sine_line, dot)
+
         self.wait(8.5)
