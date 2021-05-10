@@ -1,3 +1,3 @@
 # domaci
 
-Domaci iz matematike, vezan za trigonometriju. Radjen u manimu.
+Domaci iz matematike, iz oblasti trigonometrija. Radjen u manimu.
