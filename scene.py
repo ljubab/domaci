@@ -3,6 +3,7 @@ from manim import *
 class SineCurveUnitCircle(Scene):
     def construct(self):
         self.show_axis()
+        self.show_circle()
     
     def show_axis(self):
         x_start = np.array([-6, 0, 0])
@@ -13,6 +14,9 @@ class SineCurveUnitCircle(Scene):
 
         self.add(Line(x_start, x_end), Line(y_start, y_end))
         self.add_x_labels()
+
+        self.origin_point = np.array([-4, 0, 0])
+        self.curve_start = np.array([-3, 0, 0])
     
     def add_x_labels(self):
         x_labels = [
@@ -23,3 +27,9 @@ class SineCurveUnitCircle(Scene):
         for i in range(len(x_labels)):
             x_labels[i].next_to(np.array([-1 + 2*i, 0, 0]), DOWN)
             self.add(x_labels[i])
+    
+    def show_circle(self):
+        circle = Circle(radius=1)
+        circle.move_to(self.origin_point)
+        self.play(GrowFromCenter(circle))
+        self.circle = circle
