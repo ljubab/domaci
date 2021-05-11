@@ -95,6 +95,7 @@ class SineCurveUnitCircle(Scene):
         sin_theta.add_updater(lambda s: s.next_to(sine_line, RIGHT)).scale(0.8)
 
         lajna = Line(origin_point, [origin_point[0]+1, origin_point[1], origin_point[2]], color=GREEN)
+        origin_to_circle_line = Line(origin_point, [origin_point[0]+1.5, origin_point[1]+0.5, origin_point[2]])
         origin_to_circle_line = always_redraw(get_line_to_curve)
         angle = Angle(origin_to_circle_line, lajna)
 
@@ -107,3 +108,58 @@ class SineCurveUnitCircle(Scene):
         self.add(origin_to_circle_line, sine_line, angle, sin_theta, dot, dot_to_curve_line, sine_curve_line)
 
         self.wait(8.5)
+
+class KosinusGranicniSlucajevi(Scene):
+    def construct(self):
+        axes = Axes()
+        self.add(axes)
+
+        #definicija promenljivih
+        trig_krug = Circle(radius=2, color=RED)
+        self.play(GrowFromCenter(trig_krug))
+        self.tackica = Dot(color=WHITE).shift(2*RIGHT) #tackica koja pokazuje na krugu koliki je ugao theta
+
+        self.ugao_linijax = Line(ORIGIN, 2*RIGHT)
+        self.ugao_linijay = Line(ORIGIN, 2*RIGHT)
+
+        self.add(self.ugao_linijax, self.ugao_linijay)
+
+        def cos_updater(linija): #updater funkcija za liniju koja prikazuje duzinu kosinusa
+            linija.become( Line(ORIGIN, [self.tackica.get_center()[0], 0, 0], color = YELLOW))
+
+        #kosinus linija i odgovarajuci text
+        self.cos_linija = Line(ORIGIN, 2*RIGHT, color = YELLOW).add_updater(cos_updater)
+        self.cos_text_linija = MathTex("\\cos\\theta", color=YELLOW).add_updater(lambda c: c.next_to(self.cos_linija.get_center(), DOWN))
+
+        #text u gornjem desnom uglu
+        self.cos_vrednost = 1
+        self.theta_text = MathTex("\\theta = 0").shift(3*RIGHT+3*UP)
+        self.cos_text_vrednost = MathTex("\\cos\\theta = " + str(self.cos_vrednost), color=YELLOW).next_to(self.theta_text, DOWN)
+
+        self.prvi_slucaj()
+        self.drugi_slucaj()
+
+    def prvi_slucaj(self):
+        self.play(GrowFromPoint(self.cos_linija, ORIGIN), Write(self.cos_text_linija), FadeIn(self.tackica))
+        self.play(Write(self.theta_text), Write(self.cos_text_vrednost))
+        self.wait(3)
+
+
+    def drugi_slucaj(self):
+        self.cos_vrednost = 0
+
+        #rotiramo tacku do ugla od pi/2
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2))
+
+        ugao = Angle(self.ugao_linijax, self.ugao_linijay) #definisemo ugao
+
+        #pomocne promenljive u koje pretvaramo text kako bi animacije lepse izgledale
+        theta = MathTex("\\theta").next_to(ugao)
+        theta_text_temp = MathTex("\\theta = \\pi").shift(3*RIGHT+3*UP)
+        cos_text_vrednost_temp = MathTex("\\cos\\theta = " + str(self.cos_vrednost), color=YELLOW).next_to(theta_text_temp, DOWN)
+
+        self.play(FadeIn(ugao), Write(theta), Transform(self.theta_text, theta_text_temp))
+        self.play(Transform(self.cos_text_vrednost, cos_text_vrednost_temp))
+
+        self.wait(3)
