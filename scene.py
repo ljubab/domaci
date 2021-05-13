@@ -319,3 +319,97 @@ class CosineCurveUnitCircle(Scene):
         self.wait(8.5)
 
         dot.remove_updater(go_around_circle)
+
+class SinusGranicniSlucajevi(Scene):
+    def construct(self):
+        axes = Axes()
+        self.add(axes)
+
+        #definicija promenljivih
+        trig_krug = Circle(radius=2, color=RED)
+        self.play(GrowFromCenter(trig_krug))
+        self.tackica = Dot(color=WHITE).shift(2*RIGHT) #tackica koja pokazuje na krugu koliki je ugao theta
+
+        self.ugao_linijax = Line(ORIGIN, 2*RIGHT)
+        self.ugao_linijay = Line(ORIGIN, 2*RIGHT)
+
+        self.add(self.ugao_linijax, self.ugao_linijay)
+
+        def sin_updater(linija): #updater funkcija za liniju koja prikazuje duzinu kosinusa
+            linija.become(Line(ORIGIN, [0, self.tackica.get_center()[1], 0], color = YELLOW))
+
+        #kosinus linija i odgovarajuci text
+        self.sin_linija = Line(ORIGIN, 2*RIGHT, color = YELLOW).add_updater(sin_updater)
+        self.sin_text_linija = MathTex("\\sin\\theta", color=YELLOW).add_updater(lambda c: c.next_to(self.sin_linija.get_center(), DOWN))
+
+        #text u gornjem desnom uglu
+        self.sin_vrednost = 0
+        self.theta_text = MathTex("\\theta = 0").shift(3*RIGHT+3*UP)
+        self.sin_text_vrednost = MathTex("\\sin\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(self.theta_text, DOWN)
+
+        self.prvi_slucaj()
+        self.drugi_slucaj()
+        self.treci_slucaj()
+        self.cetvrti_slucaj()
+
+    def prvi_slucaj(self):
+        self.play(GrowFromPoint(self.sin_linija, ORIGIN), Write(self.sin_text_linija), FadeIn(self.tackica))
+        self.play(Write(self.theta_text), Write(self.sin_text_vrednost))
+        self.wait(1.5)
+
+
+    def drugi_slucaj(self):
+        #rotiramo tacku do ugla od pi/2
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2)
+        )
+
+        self.ugao = Angle(self.ugao_linijax, self.ugao_linijay) #definisemo ugao
+
+        #pomocne promenljive u koje pretvaramo text kako bi animacije lepse izgledale
+        self.sin_vrednost = 1
+        self.theta = MathTex("\\theta").next_to(self.ugao)
+        theta_text_temp = MathTex("\\theta = \\frac{\\pi}{2}").shift(3*RIGHT+3*UP)
+        sin_text_vrednost_temp = MathTex("\\cos\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(theta_text_temp, DOWN)
+
+        self.play(FadeIn(self.ugao), Write(self.theta), Transform(self.theta_text, theta_text_temp))
+        self.play(Transform(self.sin_text_vrednost, sin_text_vrednost_temp))
+
+        self.wait(1.5)
+
+    def treci_slucaj(self):
+        self.ugao.add_updater(lambda u: u.become(Angle(self.ugao_linijax, self.ugao_linijay)))
+        self.theta.add_updater(
+            lambda t: t.next_to(self.ugao)
+        )
+        self.add(self.ugao, self.theta)
+
+        self.sin_vrednost = 0
+        theta_text_temp = MathTex("\\theta = \\pi").shift(3*RIGHT+3*UP)
+        sin_text_vrednost_temp = MathTex("\\cos\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(theta_text_temp, DOWN)
+
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI/2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Transform(self.theta_text, theta_text_temp)
+                  )
+        self.play(Transform(self.sin_text_vrednost, sin_text_vrednost_temp))
+        self.wait(1.5)
+
+    def cetvrti_slucaj(self):
+        self.ugao.add_updater(lambda u: u.become(Angle(self.ugao_linijax, self.ugao_linijay)))
+        self.theta.add_updater(
+            lambda t: t.next_to(self.ugao)
+        )
+        self.add(self.ugao, self.theta)
+
+        self.sin_vrednost = -1
+        theta_text_temp = MathTex("\\theta = \\frac{3\\pi}{2}").shift(3 * RIGHT + 3 * UP)
+        sin_text_vrednost_temp = MathTex("\\cos\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(
+            theta_text_temp, DOWN)
+
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Transform(self.theta_text, theta_text_temp)
+                  )
+        self.play(Transform(self.sin_text_vrednost, sin_text_vrednost_temp))
+        self.wait(1.5)
