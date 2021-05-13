@@ -224,7 +224,7 @@ class CosineCurveUnitCircle(Scene):
 
         # U objekat self, stavljamo vrednost origin_point i curve_start za dalje koriscenje
         self.origin_point = np.array([-4, 0, 0])
-        self.curve_start = np.array([-3, 0, 0])
+        self.curve_start = np.array([-3, 10, 0])
     
     def add_x_labels(self):
         # Ova funkcija dodaje pi, 2*pi ispod x ose
@@ -247,7 +247,7 @@ class CosineCurveUnitCircle(Scene):
     
     def prikazi_grafik(self):
         self.origin_point = np.array([-4, 0, 0])
-        self.curve_start = np.array([-3, 0, 0])
+        self.curve_start = np.array([-3, 1, 0])
 
         x_start = np.array([-6, 0, 0])
         x_end = np.array([6, 0, 0])
@@ -285,20 +285,20 @@ class CosineCurveUnitCircle(Scene):
 
         def get_line_to_curve():
             x = self.curve_start[0] + self.t_offset * 4
-            y = dot.get_center()[1]
+            y = dot.get_center()[0] - self.origin_point[0]
             return Line(dot.get_center(), np.array([x, y, 0]), color=YELLOW_A, stroke_width=2)
 
         def cos_updater():
             return Line(self.origin_point, [dot.get_center()[0], 0, 0], color=GREEN)
 
         self.curve = VGroup()
-        self.curve.add(Line([-1, 0, 0], [-1, 0, 0]))
-
+        self.curve.add(Line(self.curve_start, self.curve_start))
+    
         # Ovde moras da radis tempTacku
         def get_curve():
             last_line = self.curve[-1]
             x = self.curve_start[0] + self.t_offset * 4
-            y = dot.get_center()[0]
+            y = dot.get_center()[0] - self.origin_point[0]
             new_line = Line(last_line.get_end(), np.array([x, y, 0]), color=GREEN)
             self.curve.add(new_line)
 
