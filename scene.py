@@ -370,7 +370,7 @@ class SinusGranicniSlucajevi(Scene):
         self.sin_vrednost = 1
         self.theta = MathTex("\\theta").next_to(self.ugao)
         theta_text_temp = MathTex("\\theta = \\frac{\\pi}{2}").shift(3*RIGHT+3*UP)
-        sin_text_vrednost_temp = MathTex("\\cos\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(theta_text_temp, DOWN)
+        sin_text_vrednost_temp = MathTex("\\sin\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(theta_text_temp, DOWN)
 
         self.play(FadeIn(self.ugao), Write(self.theta), Transform(self.theta_text, theta_text_temp))
         self.play(Transform(self.sin_text_vrednost, sin_text_vrednost_temp))
@@ -386,7 +386,7 @@ class SinusGranicniSlucajevi(Scene):
 
         self.sin_vrednost = 0
         theta_text_temp = MathTex("\\theta = \\pi").shift(3*RIGHT+3*UP)
-        sin_text_vrednost_temp = MathTex("\\cos\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(theta_text_temp, DOWN)
+        sin_text_vrednost_temp = MathTex("\\sin\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(theta_text_temp, DOWN)
 
         self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI/2, run_time=2),
                   Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2),
@@ -404,7 +404,7 @@ class SinusGranicniSlucajevi(Scene):
 
         self.sin_vrednost = -1
         theta_text_temp = MathTex("\\theta = \\frac{3\\pi}{2}").shift(3 * RIGHT + 3 * UP)
-        sin_text_vrednost_temp = MathTex("\\cos\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(
+        sin_text_vrednost_temp = MathTex("\\sin\\theta = " + str(self.sin_vrednost), color=YELLOW).next_to(
             theta_text_temp, DOWN)
 
         self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
