@@ -413,3 +413,138 @@ class SinusGranicniSlucajevi(Scene):
                   )
         self.play(Transform(self.sin_text_vrednost, sin_text_vrednost_temp))
         self.wait(1.5)
+
+class SineAndCosineCurveUnitCircle(Scene):
+    def construct(self):
+        self.show_axis()
+        self.show_circle()
+        self.prikazi_grafik()
+    
+    def show_axis(self):
+        # Kreira pocetnu i krajnju kordinatu x ose
+        x_start = np.array([-6, 0, 0])
+        x_end = np.array([6, 0, 0])
+
+        # Analogno kao za x osu
+        y_start = np.array([-4, -2, 0])
+        y_end = np.array([-4, 2, 0])
+
+        # Prikazuje na ekraj linije kreirane povlacenjem ovih tacaka
+        self.add(Line(x_start, x_end), Line(y_start, y_end))
+        self.add_x_labels()
+
+        # U objekat self, stavljamo vrednost origin_point i curve_start za dalje koriscenje
+        self.origin_point = np.array([-4, 0, 0])
+    
+    def add_x_labels(self):
+        # Ova funkcija dodaje pi, 2*pi ispod x ose
+        x_labels = [
+            MathTex("\pi"), MathTex("2 \pi"),
+            MathTex("3 \pi"), MathTex("4 \pi")
+        ]
+
+        for i in range(len(x_labels)):
+            # np.array je zapravo mobject, sto znaci u odnosu na tu kordinatu on spusta mobject ka dole
+            x_labels[i].next_to(np.array([-1 + 2*i, 0, 0]), DOWN)
+            self.add(x_labels[i])
+    
+    def show_circle(self):
+        # Kreira krug
+        circle = Circle(radius=1)
+        circle.move_to(self.origin_point)
+        self.play(GrowFromCenter(circle))
+        self.circle = circle
+    
+    def prikazi_grafik(self):
+        self.origin_point = np.array([-4, 0, 0])
+        self.cosine_start = np.array([-3, 1, 0])
+        self.sine_start = np.array([-3, 0, 0])
+
+        x_start = np.array([-6, 0, 0])
+        x_end = np.array([6, 0, 0])
+
+        y_start = np.array([-4, -2, 0])
+        y_end = np.array([-4, 2, 0])
+
+        x_axis = Line(x_start, x_end)
+        y_axis = Line(y_start, y_end)
+
+        circle = Circle(radius=1)
+        circle.move_to(self.origin_point)
+
+        self.play(FadeIn(circle), FadeIn(x_axis), FadeIn(y_axis))
+
+        self.add_x_labels()
+        dot = Dot(radius=0.08, color=YELLOW)
+        dot.move_to(circle.point_from_proportion(0))
+        self.t_offset = 0
+        rate = 0.25
+
+        # Funkcija za pomeranje tacke oko kruga, ne diraj!!!
+        def go_around_circle(mob, dt):
+            self.t_offset += (dt * rate)
+            mob.move_to(circle.point_from_proportion(self.t_offset % 1))
+
+        # Poluprecnik koji se vrti, ne diraj!!!
+        def get_line_to_circle():
+            return Line(self.origin_point, dot.get_center(), color=BLUE)
+
+        def get_cosine_line_to_curve():
+            x = self.cosine_start[0] + self.t_offset * 4
+            y = dot.get_center()[0] - self.origin_point[0]
+            return Line(dot.get_center(), np.array([x, y, 0]), color=YELLOW_A, stroke_width=2)
+        
+        def get_sine_line_to_curve():
+            x = self.sine_start[0] + self.t_offset * 4
+            y = dot.get_center()[1]
+            return Line(dot.get_center(), np.array([x, y, 0]), color=YELLOW_A, stroke_width=2)
+
+        def cos_updater():
+            return Line([self.origin_point[0], dot.get_center()[1], 0], dot.get_center(), color=GREEN)
+
+        def sine_updater():
+            newLine = Line([dot.get_center()[0], 0, 0], dot.get_center(), color=BLUE)
+            return newLine
+
+        self.cos_curve = VGroup()
+        self.cos_curve.add(Line(self.cosine_start, self.cosine_start))
+    
+        # Ovde moras da radis tempTacku
+        def add_cos_curve():
+            last_line = self.cos_curve[-1]
+            x = self.cosine_start[0] + self.t_offset * 4
+            y = dot.get_center()[0] - self.origin_point[0]
+            new_line = Line(last_line.get_end(), np.array([x, y, 0]), color=GREEN)
+            self.cos_curve.add(new_line)
+
+            return self.cos_curve
+        
+        self.sine_curve = VGroup()
+        self.sine_curve.add(Line(self.sine_start, self.sine_start))
+
+        def add_sin_curve():
+            last_line = self.sine_curve[-1]
+            x = self.sine_start[0] + self.t_offset * 4
+            y = dot.get_center()[1]
+            new_line = Line(last_line.get_end(), np.array([x, y, 0]), color=BLUE)
+            self.sine_curve.add(new_line)
+
+            return self.sine_curve
+
+
+        dot.add_updater(go_around_circle)
+
+        cos_line = always_redraw(cos_updater)
+        sine_line = always_redraw(sine_updater)
+
+        origin_to_circle_line = always_redraw(get_line_to_circle)
+        dot_to_curve_line = always_redraw(get_cosine_line_to_curve)
+        dot_to_curve_line2 = always_redraw(get_sine_line_to_curve)
+        cos_curve_line = always_redraw(add_cos_curve)
+        sine_curve_line = always_redraw(add_sin_curve)
+
+        self.add(dot)
+        self.add(cos_line, sine_line, origin_to_circle_line, circle, dot_to_curve_line, sine_curve_line, cos_curve_line, dot_to_curve_line2)
+        self.wait(8.5)
+
+        dot.remove_updater(go_around_circle)
