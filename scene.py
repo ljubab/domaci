@@ -289,7 +289,7 @@ class CosineCurveUnitCircle(Scene):
             return Line(dot.get_center(), np.array([x, y, 0]), color=YELLOW_A, stroke_width=2)
 
         def cos_updater():
-            return Line(self.origin_point, [dot.get_center()[0], 0, 0], color=GREEN)
+            return Line([self.origin_point[0], dot.get_center()[1], 0], dot.get_center(), color=GREEN)
 
         self.curve = VGroup()
         self.curve.add(Line(self.curve_start, self.curve_start))
