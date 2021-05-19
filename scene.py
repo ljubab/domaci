@@ -677,7 +677,7 @@ class Kosinus(Scene):
 
     def prikazi_grafik(self):
         self.origin_point = np.array([-4, 0, 0])
-        self.curve_start = np.array([-3, 0, 0])
+        self.curve_start = np.array([-3, 1, 0])
 
         x_start = np.array([-6, 0, 0])
         x_end = np.array([6, 0, 0])
