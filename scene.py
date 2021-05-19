@@ -548,3 +548,232 @@ class SineAndCosineCurveUnitCircle(Scene):
         self.wait(8.5)
 
         dot.remove_updater(go_around_circle)
+
+class Tangens(Scene):
+    def construct(self):
+        self.axes = Axes()
+        self.add(self.axes)
+        self.tangens_pocetak = np.array([2, 0, 0])
+
+        self.trig_krug = Circle(radius=2, color=RED)
+        self.play(GrowFromCenter(self.trig_krug))
+        self.tackica = Dot(color=WHITE).shift(2 * RIGHT)  # tackica koja pokazuje na krugu koliki je ugao theta
+
+        def tangens_updater(linija):
+            sinus = self.tackica.get_center()[1]
+            kosinus = self.tackica.get_center()[0]
+
+            if kosinus == 0:
+                linija.become(Line(self.tangens_pocetak, [2, 9, 0], color=BLUE_C))
+            else:
+                tangens = sinus/kosinus
+                linija.become(Line(self.tangens_pocetak, [2, 2*tangens, 0], color=BLUE_C))
+
+        def produzena_linija_updater(linija):
+            sinus = self.tackica.get_center()[1]
+            kosinus = self.tackica.get_center()[0]
+
+            if kosinus == 0:
+                linija.become(Line(self.tackica.get_center(), [0, 10, 0]))
+            else:
+                tangens = sinus/kosinus
+                linija.become(Line(self.tackica.get_center(), [2, 2*tangens, 0]))
+
+        self.produzena_linija = Line(self.tackica.get_center(), self.tackica.get_center()).add_updater(produzena_linija_updater)
+
+        self.ugao_linijax = Line(ORIGIN, 2 * RIGHT)
+        self.ugao_linijay = Line(ORIGIN, 2 * RIGHT)
+        self.tangensna_osa = Line([2, -3, 0], [2, 3, 0])
+        self.tangens_linija = Line([2, 0, 0], [2, 0, 0], color=BLUE_C).add_updater(tangens_updater)
+
+        #text promenljive
+        self.tangens_text = MathTex("tg \\theta", color=BLUE_C).add_updater(
+            lambda t: t.next_to(self.tangens_linija.get_center(), RIGHT)
+        )
+        self.tg_vrednost = 0
+        self.theta = MathTex("\\theta = 0").shift(4*RIGHT + 3*UP)
+        self.tg_text_vrednost = MathTex("tg \\theta = " + str(self.tg_vrednost), color=BLUE_C).next_to(self.theta, DOWN)
+
+
+        self.play(FadeIn(self.tackica), GrowFromCenter(self.ugao_linijax),
+                  GrowFromCenter(self.ugao_linijay), FadeIn(self.tangensna_osa),
+                  FadeIn(self.produzena_linija)
+        )
+
+        self.prvi_slucaj()
+        self.drugi_slucaj()
+        self.treci_slucaj()
+        self.cetvrti_slucaj()
+        self.obrisi()
+
+    def prvi_slucaj(self):
+        self.tg_vrednost = 0
+        self.tg_text_vrednost = MathTex("tg\\theta = " + str(self.tg_vrednost), color=BLUE_C).next_to(self.theta, DOWN)
+
+        self.play(Write(self.tg_text_vrednost), Write(self.theta), Write(self.tangens_text))
+        self.wait(1.5)
+
+    def drugi_slucaj(self):
+        self.add(self.tangens_linija)
+
+        #definisanje potrebnih promenljivih
+        self.tg_vrednost = "?"
+        theta_temp = MathTex("\\theta = \\frac{\\pi}{2}").shift(4*RIGHT+3*UP)
+        tg_text_vrednost_temp = MathTex("tg\\theta = " + self.tg_vrednost, color=BLUE_C).next_to(theta_temp, DOWN)
+
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2)
+                  )
+
+        self.ugao = Angle(self.ugao_linijax, self.ugao_linijay)
+        self.theta_ugao = MathTex("\\theta").add_updater(
+            lambda u: u.next_to(self.ugao)
+        )
+
+        self.play(FadeIn(self.ugao), Write(self.theta_ugao),
+                  Transform(self.theta, theta_temp),
+                  Transform(self.tg_text_vrednost, tg_text_vrednost_temp)
+        )
+        self.wait(1.5)
+
+    def treci_slucaj(self):
+        self.ugao.add_updater(lambda u: u.become(Angle(self.ugao_linijax, self.ugao_linijay)))
+        self.add(self.ugao)
+
+        self.tg_vrednost = 0
+        theta_temp = MathTex("\\theta = \\pi").shift(4 * RIGHT + 3 * UP)
+        tg_text_vrednost_temp = MathTex("tg\\theta = " + str(self.tg_vrednost), color=BLUE_C).next_to(theta_temp, DOWN)
+
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Transform(self.theta, theta_temp)
+                  )
+
+        self.play(Transform(self.tg_text_vrednost, tg_text_vrednost_temp))
+        self.wait(1.5)
+
+    def cetvrti_slucaj(self):
+        self.tg_vrednost = "?"
+        theta_temp = MathTex("\\theta = \\frac{3\\pi}{2}").shift(4 * RIGHT + 3 * UP)
+        tg_text_vrednost_temp = MathTex("tg\\theta = " + self.tg_vrednost, color=BLUE_C).next_to(theta_temp, DOWN)
+
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Transform(self.theta, theta_temp)
+                  )
+
+        self.play(Transform(self.tg_text_vrednost, tg_text_vrednost_temp))
+        self.wait(1.5)
+
+    def obrisi(self):
+        self.remove(self.ugao, self.tangens_linija, self.produzena_linija)
+        self.play(FadeOut(self.tg_text_vrednost), FadeOut(self.theta))
+        self.play(FadeOut(self.ugao_linijax), FadeOut(self.ugao_linijay),
+                  FadeOut(self.theta_ugao), FadeOutToPoint(self.tackica, ORIGIN),
+                  FadeOutToPoint(self.tangensna_osa, self.tangens_pocetak),
+                  FadeOut(self.trig_krug), FadeOut(self.axes)
+                  )
+
+
+class Kotangens(Scene):
+    def construct(self):
+        self.axes = Axes()
+        self.add(self.axes)
+        self.kotangens_pocetak = np.array([0, 2, 0])
+
+        self.trig_krug = Circle(radius=2, color=RED)
+        self.play(GrowFromCenter(self.trig_krug))
+        self.tackica = Dot(color=WHITE).shift(2 * RIGHT)  # tackica koja pokazuje na krugu koliki je ugao theta
+
+        def kotangens_updater(linija):
+            sinus = self.tackica.get_center()[1]
+            kosinus = self.tackica.get_center()[0]
+
+            if sinus == 0:
+                linija.become(Line(self.kotangens_pocetak, [9, 2, 0], color=RED_A))
+            else:
+                kotangens = kosinus / sinus
+                linija.become(Line(self.kotangens_pocetak, [2 * kotangens, 2, 0], color=RED_A))
+
+        def produzena_linija_updater(linija):
+            sinus = self.tackica.get_center()[1]
+            kosinus = self.tackica.get_center()[0]
+
+            if sinus == 0:
+                linija.become(Line(self.tackica.get_center(), [10, 0, 0]))
+            else:
+                kotangens = kosinus / sinus
+                linija.become(Line(self.tackica.get_center(), [2 * kotangens, 2, 0]))
+
+        self.produzena_linija = Line(self.tackica.get_center(), self.tackica.get_center()).add_updater(
+            produzena_linija_updater)
+
+        self.ugao_linijax = Line(ORIGIN, 2 * RIGHT)
+        self.ugao_linijay = Line(ORIGIN, 2 * RIGHT)
+        self.kotangensna_osa = Line([-3, 2, 0], [3, 2, 0])
+        self.kotangens_linija = Line([0, 2, 0], [0, 2, 0], color=RED_A).add_updater(kotangens_updater)
+
+        # text promenljive
+        self.kotangens_text = MathTex("ctg \\theta", color=RED_A).add_updater(
+            lambda t: t.next_to(self.kotangens_linija.get_center(), UP)
+        )
+        self.ctg_vrednost = "?"
+        self.theta = MathTex("\\theta = 0").shift(4 * RIGHT + 3 * UP)
+        self.ctg_text_vrednost = MathTex("ctg \\theta = " + str(self.ctg_vrednost), color=BLUE_C).next_to(self.theta, DOWN)
+
+        self.play(FadeIn(self.tackica), GrowFromCenter(self.ugao_linijax),
+                  GrowFromCenter(self.ugao_linijay), FadeIn(self.kotangensna_osa),
+                  FadeIn(self.produzena_linija)
+                  )
+
+        self.prvi_slucaj()
+        self.drugi_slucaj()
+        self.treci_slucaj()
+        self.cetvrti_slucaj()
+        self.obrisi()
+
+    def prvi_slucaj(self):
+        self.ctg_vrednost = "?"
+        self.ctg_text_vrednost = MathTex("ctg\\theta = " + str(self.ctg_vrednost), color=RED_A).next_to(self.theta, DOWN)
+
+        self.play(Write(self.ctg_text_vrednost), Write(self.theta), Write(self.kotangens_text))
+        self.wait(1.5)
+
+    def drugi_slucaj(self):
+        self.add(self.kotangens_linija)
+
+        # definisanje potrebnih promenljivih
+        self.ctg_vrednost = 0
+        theta_temp = MathTex("\\theta = \\frac{\\pi}{2}").shift(4 * RIGHT + 3 * UP)
+        ctg_text_vrednost_temp = MathTex("ctg\\theta = " + str(self.ctg_vrednost), color=RED_A).next_to(theta_temp, DOWN)
+
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2)
+                  )
+
+        self.ugao = Angle(self.ugao_linijax, self.ugao_linijay)
+        self.theta_ugao = MathTex("\\theta").add_updater(
+            lambda u: u.next_to(self.ugao)
+        )
+
+        self.play(FadeIn(self.ugao), Write(self.theta_ugao),
+                  Transform(self.theta, theta_temp),
+                  Transform(self.ctg_text_vrednost, ctg_text_vrednost_temp)
+                  )
+        self.wait(1.5)
+
+    def treci_slucaj(self):
+        self.ugao.add_updater(lambda u: u.become(Angle(self.ugao_linijax, self.ugao_linijay)))
+        self.add(self.ugao)
+
+        self.ctg_vrednost = "?"
+        theta_temp = MathTex("\\theta = \\pi").shift(4 * RIGHT + 3 * UP)
+        ctg_text_vrednost_temp = MathTex("ctg\\theta = " + str(self.ctg_vrednost), color=RED_A).next_to(theta_temp, DOWN)
+
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Transform(self.theta, theta_temp)
+                  )
+
+        self.play(Transform(self.ctg_text_vrednost, ctg_text_vrednost_temp))
+        self.wait(1.5)
