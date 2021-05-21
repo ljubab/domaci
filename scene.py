@@ -566,6 +566,28 @@ class Kotangens(Scene):
 
         self.play(Transform(self.ctg_text_vrednost, ctg_text_vrednost_temp))
         self.wait(1.5)
+    
+    def cetvrti_slucaj(self):
+        self.ctg_vrednost = 0
+        theta_temp = MathTex("\\theta = \\frac{3\\pi}{2}").shift(4 * RIGHT + 3 * UP)
+        ctg_text_vrednost_temp = MathTex("ctg\\theta = " + str(self.ctg_vrednost), color=RED_A).next_to(theta_temp, DOWN)
+
+        self.play(Rotating(self.tackica, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Rotating(self.ugao_linijay, about_point=ORIGIN, radians=PI / 2, run_time=2),
+                  Transform(self.theta, theta_temp)
+                  )
+
+        self.play(Transform(self.ctg_text_vrednost, ctg_text_vrednost_temp))
+        self.wait(1.5)
+
+    def obrisi(self):
+        self.remove(self.ugao, self.kotangens_linija, self.produzena_linija)
+        self.play(FadeOut(self.ctg_text_vrednost), FadeOut(self.theta))
+        self.play(FadeOut(self.ugao_linijax), FadeOut(self.ugao_linijay),
+                  FadeOut(self.theta_ugao), FadeOutToPoint(self.tackica, ORIGIN),
+                  FadeOutToPoint(self.kotangensna_osa, self.kotangens_pocetak),
+                  FadeOut(self.trig_krug), FadeOut(self.axes)
+                  )
 
 class Kosinus(Scene):
     def construct(self):
@@ -751,3 +773,34 @@ class Kosinus(Scene):
         for i in range(len(x_labels)):
             x_labels[i].next_to(np.array([-1 + 2 * i, 0, 0]), DOWN)
             self.add(x_labels[i])
+
+class TangensGrafik(GraphScene):
+    def __init__(self, **kwargs):
+        GraphScene.__init__(
+            self,
+            y_min=-10,
+            y_max=10,
+            x_max=10,
+            x_min=-10,
+            x_axis_config={"tick_frequency": 1},
+            y_axis_config={"tick_frequency": 1},
+            graph_origin= ORIGIN,
+            **kwargs
+        )
+    def construct(self):
+        self.setup_axes()
+        tan_function = lambda x: np.tan(x)
+        tan_graph = VGroup()
+        approx_factor = 0.934
+        for n in range(-1,2):
+            graph = self.get_graph(tan_function, 
+                                    color = RED,
+                                    x_min = (-PI/2)*approx_factor+n*PI,
+                                    x_max = (PI/2)*approx_factor+n*PI
+                                    )
+            tan_graph.add(graph)
+        
+        self.play(
+            Create(tan_graph),
+        )
+        self.wait()
