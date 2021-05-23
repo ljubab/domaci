@@ -804,3 +804,34 @@ class TangensGrafik(GraphScene):
             Create(tan_graph),
         )
         self.wait()
+
+class KotangensGrafik(GraphScene):
+    def __init__(self, **kwargs):
+        GraphScene.__init__(
+            self,
+            y_min=-10,
+            y_max=10,
+            x_max=10,
+            x_min=-10,
+            x_axis_config={"tick_frequency": 1},
+            y_axis_config={"tick_frequency": 1},
+            graph_origin= ORIGIN,
+            **kwargs
+        )
+    def construct(self):
+        self.setup_axes()
+        tan_function = lambda x: -np.tan(x)
+        tan_graph = VGroup()
+        approx_factor = 0.934
+        for n in range(-1,2):
+            graph = self.get_graph(tan_function, 
+                                    color = RED,
+                                    x_min = (-PI/2)*approx_factor+n*PI,
+                                    x_max = (PI/2)*approx_factor+n*PI
+                                    )
+            tan_graph.add(graph)
+        
+        self.play(
+            Create(tan_graph),
+        )
+        self.wait()
