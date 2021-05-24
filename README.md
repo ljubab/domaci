@@ -1,14 +1,38 @@
-# domaci
+## domaci
 
 Domaci iz matematike, iz oblasti trigonometrija. Radjen u manimu.
 
-https://user-images.githubusercontent.com/60656518/119337161-cae03000-bc8e-11eb-834c-07ffca74280d.mp4
-https://user-images.githubusercontent.com/60656518/119337201-d5022e80-bc8e-11eb-928e-324d4f0b81e3.mp4
-https://user-images.githubusercontent.com/60656518/119337225-dc293c80-bc8e-11eb-990e-e21aba0ffbf5.mp4
-https://user-images.githubusercontent.com/60656518/119337233-e0555a00-bc8e-11eb-8c0a-36f43cc2a004.mp4
-https://user-images.githubusercontent.com/60656518/119337239-e2b7b400-bc8e-11eb-879f-eb04c36c2d73.mp4
-https://user-images.githubusercontent.com/60656518/119337253-e51a0e00-bc8e-11eb-90c7-d964ab2e74d6.mp4
-https://user-images.githubusercontent.com/60656518/119337263-e814fe80-bc8e-11eb-859c-bd7668464fae.mp4
-https://user-images.githubusercontent.com/60656518/119337218-d92e4c00-bc8e-11eb-8e86-18561b396474.mp4
+
+# Ovaj video se sastoji iz granicni slucajeva kosinusa i grafika kosinusne funkcije.
+
+https://user-images.githubusercontent.com/60656518/119337864-97ea6c00-bc8f-11eb-9455-bbbf5d896fd4.mp4
+
+# Ovaj video pokazuje grafik sinus funkcije.
+
+https://user-images.githubusercontent.com/60656518/119338220-05969800-bc90-11eb-8dfd-441a15845789.mp4
+
+# Ovaj video pokazuje granicje slucajeve sinusa.
+
+https://user-images.githubusercontent.com/60656518/119338300-20690c80-bc90-11eb-8e67-78a892e60ac5.mp4
+
+# Ovaj video pokazuje grafike sinusa i kosinusa funkcije.
+
+https://user-images.githubusercontent.com/60656518/119338108-e1d35200-bc8f-11eb-9acf-9a236b548488.mp4
+
+# Ovaj video pokazuje grafik tangens funkcije.
+
+https://user-images.githubusercontent.com/60656518/119338427-455d7f80-bc90-11eb-9560-cb70803b57db.mp4
+
+# Ovaj video pokazuje grafik kotangens funkcije.
+
+https://user-images.githubusercontent.com/60656518/119338490-5c03d680-bc90-11eb-9aae-97ac8b35e90f.mp4
+
+# Ovaj video pokazuje granicne slucajeve tangensa.
+
+https://user-images.githubusercontent.com/60656518/119338588-78a00e80-bc90-11eb-99a7-826e4d414ac2.mp4
+
+# Ovaj video pokazuje granicne slucajeve kotagensa.
+
+https://user-images.githubusercontent.com/60656518/119338671-91102900-bc90-11eb-83be-e25b6300876e.mp4
 
 ovaj tekst je dodao Ivan
